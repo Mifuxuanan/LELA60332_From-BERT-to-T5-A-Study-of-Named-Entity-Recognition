@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-This repository contains code and resources for Named Entity Recognition (NER) experiments, which fine-tune the BERT and T5 models on both full (7-tag) and simplified (3-tag) BIO tagsets (Data preprocessing in every main experiment) by span-level F1 score as early stopping checkpoints. I evaluate their performance on in-domain and out-of-domain test sets, reporting a bunch of metrics and detailed error analysis.
+This repository contains code and resources for Named Entity Recognition (NER) experiments, which fine-tune the BERT and T5 models on both full (7-tag) and simplified (3-tag) BIO tagsets (Data preprocessing in every main experiment) by span-level F1 score as early stopping checkpoints. I evaluate their performance on in-domain and out-of-domain test sets, reporting a bunch of metrics and detailed error analysis (extract the error sentences from every dataset in BERT_NER.ipynb).
 
 ---
 
