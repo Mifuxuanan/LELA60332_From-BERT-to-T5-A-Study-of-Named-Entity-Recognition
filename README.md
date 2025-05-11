@@ -36,7 +36,7 @@ root/
 2. Run the entire notebook
 3. Load the related checkpoints for evaluation stages, which are available via Hugging Face:(The document size is too large to upload in the github)
   * **Download link**:https://huggingface.co/Mifuxuanan/CL2_Checkpoints/resolve/main/Checkpoints.rar
-4. If you don't want to load the checkpoints, you can directly adjust the parameter positions of "encoder" and "clf_head"(BERT) or "model"(T5) in the validation and evaluation function.
+4. If you don't want to load the checkpoints, you can directly adjust the parameter positions of "encoder" and "clf_head"(BERT) or "model"(T5) when calling the validation and evaluation (Test & OOD) function.
 ---
 
 ## Data Preparation
