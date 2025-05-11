@@ -129,13 +129,13 @@ python T5_NER.ipynb\
 
 Run evaluation on both in-domain and OOD splits with the checkpoints:
 
-* Computes **span-level** labelled/unlabelled Precision, Recall, F1, macro F1
-* Computes **token-level** accuracy
-* Computes **span-level** labelled Precision, Recall, F1 for the tag types: "LOC", "PER", "ORG"
+1. Computes **span-level** labelled/unlabelled Precision, Recall, F1, macro F1
+2. Computes **token-level** accuracy
+3. Computes **span-level** labelled Precision, Recall, F1 for the tag types: "LOC", "PER", "ORG"
 * The related operations for evaluating with and without checkpoints have shown above
   
-* Generates dataframes for error samples across domains (Only for BERT)
--- e.g. '3-4. Error Analysis in Test/OOD'
+4. Generates dataframes for error samples across domains (Only for BERT in 'BERT_NER.ipynb')
+* e.g. '3-4. Error Analysis in Test/OOD'
 ```
 # Error Analysis with Checkpoint
 clf_head = ClassificationHead(n_classes=7).to(device)
