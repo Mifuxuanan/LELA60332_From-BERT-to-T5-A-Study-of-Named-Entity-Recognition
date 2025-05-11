@@ -35,8 +35,50 @@ root/
 1. Directly open the two scripts of the main experiments
 2. Run the entire notebook
 3. Load the related checkpoints for evaluation stages, which are available via Hugging Face:(The document size is too large to upload in the github)
-  * **Download link**:https://huggingface.co/Mifuxuanan/CL2_Checkpoints/resolve/main/Checkpoints.rar
+  * **Download link**: https://huggingface.co/Mifuxuanan/CL2_Checkpoints/resolve/main/Checkpoints.rar
 4. If you don't want to load the checkpoints, you can directly adjust the parameter positions of "encoder" and "clf_head"(BERT) or "model"(T5) when calling the validation and evaluation (Test & OOD) function.
+ * e.g. For BERT in 'BERT_NER.ipynb'
+```
+# Evaluation with Checkpoint
+BERT_Full_enc, BERT_Full_clf = load_checkpoint("BERT_Full_Weightedfn0.8_epoch18_lr5.pt", device, encoder, clf_head)
+## Labelled span-level F1 and P/R are running in the function 'Validation_epoch' with the first parameter as 'Test' or 'OOD' in the section of '3-3. Test & OOD'
+Test_Full_Loss, Test_Full_Accuracy, Test_Full_Precision, Test_Full_Recall, Test_Full_F1 = validate_epoch(Test, tokeniser, BERT_Full_enc, BERT_Full_clf,
+                                                                                                        device, tag_to_i, i_to_tag, batch_size=32, labelled=True)
+## Other metrics are running in the function 'evaluation'
+Test_result = evaluation(Test, process_batch_sent,
+                         tokeniser, BERT_Full_enc, BERT_Full_clf, device,
+                         tag_to_i, i_to_tag, batch_size=32)
+```
+```
+# Evaluation with the current model
+Test_Full_Loss, Test_Full_Accuracy, Test_Full_Precision, Test_Full_Recall, Test_Full_F1 = validate_epoch(Test, tokeniser, encoder, clf_head,
+                                                                                                        device, tag_to_i, i_to_tag, batch_size=32, labelled=True)
+Test_result = evaluation(Test, process_batch_sent,
+                         tokeniser, encoder, clf_head, device,
+                         tag_to_i, i_to_tag, batch_size=32)
+```
+* e.g. For T5 in 'T5_NER.ipynb'
+```
+# Evaluation with Checkpoint
+T5_Full_mod = load_checkpoint_T5("T5_Full_epoch07_4.pt", device, model)
+batch_size=32
+## Labelled span-level F1 and P/R are running in the function 'Validation_epoch_T5' with the first parameter as 'Test' or 'OOD' in the section of '3-2. Test & OOD'
+Test_Full_Precision, Test_Full_Recall, Test_Full_F1 = validate_epoch_T5(Test, batch_size,
+                                               tokeniser, T5_Full_mod, device, max_len=256)
+
+## Other metrics are running in the function 'evaluation_T5'
+Test_result_T5 = evaluation_T5(Test, tokeniser, T5_Full_mod, 
+                               device, tag_to_i, batch_size=32)
+```
+```
+# Evaluation with the current model
+batch_size=32
+Test_Full_Precision, Test_Full_Recall, Test_Full_F1 = validate_epoch_T5(Test, batch_size,
+                                               tokeniser, model, device, max_len=256)
+
+Test_result_T5 = evaluation_T5(Test, tokeniser, model, 
+                               device, tag_to_i, batch_size=32)
+```
 ---
 
 ## Data Preparation
@@ -90,7 +132,27 @@ Run evaluation on both in-domain and OOD splits with the checkpoints:
 * Computes **span-level** labelled/unlabelled Precision, Recall, F1, macro F1
 * Computes **token-level** accuracy
 * Computes **span-level** labelled Precision, Recall, F1 for the tag types: "LOC", "PER", "ORG"
-* Generates dataframes for error samples across domains
+* The related operations for evaluating with and without checkpoints have shown above
+  
+* Generates dataframes for error samples across domains (Only for BERT)
+-- e.g. '3-4. Error Analysis in Test/OOD'
+```
+# Error Analysis with Checkpoint
+clf_head = ClassificationHead(n_classes=7).to(device)
+## Extract the spans and tags for both gold and predicted ones, which are running in the function 'prediction_for_EA' with the first parameter as 'Test' or 'OOD'
+## Followed by the code about Error Dataframes in the original document
+BERT_Full_enc, BERT_Full_clf = load_checkpoint("BERT_Full_Weightedfn0.8_epoch18_lr5.pt", device, encoder, clf_head)
+Full_word_ls2, Full_all_golds2, Full_all_preds2, Full_gold_spans2, Full_pred_spans2 = prediction_for_EA(Test, 
+                                      tokeniser, BERT_Full_enc, BERT_Full_clf,
+                                      device, tag_to_i, i_to_tag, batch_size=32, labelled=True)
+```
+```
+# Error Analysis with the current model
+clf_head = ClassificationHead(n_classes=7).to(device)
+Full_word_ls2, Full_all_golds2, Full_all_preds2, Full_gold_spans2, Full_pred_spans2 = prediction_for_EA(Test, 
+                                      tokeniser, encoder, clf_head,
+                                      device, tag_to_i, i_to_tag, batch_size=32, labelled=True)
+```
 ---
 
 ## Citation & References
